@@ -31,9 +31,9 @@ class Database:
         sql = """
         CREATE TABLE Users (
             id int NOT NULL,
-            Name varchar(255) NOT NULL,
-            email varchar(255),
-            language varchar(3),
+            full_name varchar(255) NOT NULL,
+            phone_number varchar(255) NOT NULL,
+            lang varchar(3) NOT NULL,
             PRIMARY KEY (id)
             );
 """
@@ -46,13 +46,12 @@ class Database:
         ])
         return sql, tuple(parameters.values())
 
-    def add_user(self, id: int, name: str, email: str = None, language: str = 'uz'):
-        # SQL_EXAMPLE = "INSERT INTO Users(id, Name, email) VALUES(1, 'John', 'John@gmail.com')"
+    def add_user(self, id: int, full_name: str, phone_number: str, lang: str):
 
         sql = """
-        INSERT INTO Users(id, Name, email, language) VALUES(?, ?, ?, ?)
+        INSERT INTO Users(id, full_name, phone_number, lang) VALUES(?, ?, ?, ?)
         """
-        self.execute(sql, parameters=(id, name, email, language), commit=True)
+        self.execute(sql, parameters=(id, full_name, phone_number, lang), commit=True)
 
     def select_all_users(self):
         sql = """
@@ -70,16 +69,13 @@ class Database:
     def count_users(self):
         return self.execute("SELECT COUNT(*) FROM Users;", fetchone=True)
 
-    def update_user_email(self, email, id):
+    def update_user_phone_number(self, phone_number: str, id: int):
         # SQL_EXAMPLE = "UPDATE Users SET email=mail@gmail.com WHERE id=12345"
 
         sql = f"""
-        UPDATE Users SET email=? WHERE id=?
+        UPDATE Users SET phone_number=? WHERE id=?
         """
-        return self.execute(sql, parameters=(email, id), commit=True)
-
-    def delete_users(self):
-        self.execute("DELETE FROM Users WHERE TRUE", commit=True)
+        return self.execute(sql, parameters=(phone_number, id), commit=True)
 
 
 def logger(statement):
